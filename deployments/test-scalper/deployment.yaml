@@ -78,8 +78,8 @@ spec:
           name: merged-config
       volumes:
       - configMap:
-          name: scalper-config
-        name: scalper-config
+          name: test-scalper-config
+        name: test-scalper-config
       - configMap:
           name: connection-config
         name: connection-config
