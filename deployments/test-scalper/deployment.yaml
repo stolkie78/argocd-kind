@@ -30,24 +30,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: test-scalper
-  name: test-scalper
+    app: bitvavo-scalper
+  name: bitvavo-scalper
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: test-scalper
+      app: bitvavo-scalper
   template:
     metadata:
       labels:
-        app: test-scalper
+        app: bitvavo-scalper
     spec:
       containers:
       - args:
         - --config
         - /app/config/scalper.json
+        env: null
         image: bitvavo-scalper:0.1.23
         name: bitvavo-scalper
+        ports:
+        - containerPort: 8080
+          name: http
         resources:
           limits:
             cpu: 500m
@@ -67,21 +71,21 @@ spec:
         - |
           echo "Inhoud van /scalper:" && ls -la /scalper
           echo "Inhoud van /connection:" && ls -la /connection
-          cp -r /scalper/* /merged/ && cp -r /connection/* /merged/
+          cp -rL /scalper/* /merged/ && cp -rL /connection/* /merged/
           echo "Inhoud van /merged:" && ls -la /merged
         image: busybox
         name: copy-config
         volumeMounts:
         - mountPath: /scalper
-          name: test-scalper-config
+          name: scalper-config
         - mountPath: /connection
           name: connection-config
         - mountPath: /merged
           name: merged-config
       volumes:
       - configMap:
-          name: test-scalper-config
-        name: test-scalper-config
+          name: scalper-config
+        name: scalper-config
       - configMap:
           name: connection-config
         name: connection-config
