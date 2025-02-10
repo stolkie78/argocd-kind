@@ -65,8 +65,10 @@ spec:
         - sh
         - -c
         - |
-          # Kopieer alle bestanden van de scalper-config en connection-config naar de merge directory
+          echo "Inhoud van /scalper:" && ls -la /scalper
+          echo "Inhoud van /connection:" && ls -la /connection
           cp -r /scalper/* /merged/ && cp -r /connection/* /merged/
+          echo "Inhoud van /merged:" && ls -la /merged
         image: busybox
         name: copy-config
         volumeMounts:
