@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: "2.8.0" # Pas aan indien nodig
+    targetRevision: "2.10.2" # Pas aan indien nodig
     chart: loki-stack
     helm:
       values: |
