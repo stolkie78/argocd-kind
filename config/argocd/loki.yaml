@@ -10,17 +10,33 @@ spec:
   project: default
   source:
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: "2.8.0" # pas aan indien nodig
+    targetRevision: "2.8.0" # Pas aan indien nodig
     chart: loki-stack
     helm:
       values: |
+        # Globale uitschakeling van PSP
+        podSecurityPolicy:
+          enabled: false
+          create: false
+
+        # Loki settings
         loki:
           enabled: true
+          podSecurityPolicy:
+            enabled: false
+            create: false
+
+        # Promtail settings
         promtail:
           enabled: true
+          podSecurityPolicy:
+            enabled: false
+            create: false
+
+        # Grafana settings
         grafana:
           enabled: true
-          installCRDs: true   # zorgt ervoor dat de Grafana CRD’s (bv. GrafanaDashboard) worden geïnstalleerd
+          installCRDs: true   # Zorgt ervoor dat de Grafana CRD's worden geïnstalleerd
           ingress:
             enabled: true
             annotations:
@@ -28,9 +44,8 @@ spec:
             hosts:
               - "loki.kind.local"
           podSecurityPolicy:
-            enabled: false   # Schakel PSP specifiek voor Grafana uit
-        podSecurityPolicy:
-          enabled: false     # Schakel globale PSP aanmaak uit
+            enabled: false
+            create: false
   syncPolicy:
     automated:
       prune: true
