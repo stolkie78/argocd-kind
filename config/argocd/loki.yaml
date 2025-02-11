@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: "2.8.0" # vervang dit door de gewenste chart-versie
+    targetRevision: "2.8.0" # adjust to the desired chart version
     chart: loki-stack
     helm:
       values: |
@@ -20,13 +20,15 @@ spec:
           enabled: true
         grafana:
           enabled: true
-          installCRDs: true   # zorgt ervoor dat de Grafana CRD’s (bv. voor GrafanaDashboard) worden geïnstalleerd
+          installCRDs: true   # ensures Grafana CRDs (e.g., GrafanaDashboard) are installed
           ingress:
             enabled: true
             annotations:
               kubernetes.io/ingress.class: "nginx"
             hosts:
               - "grafana.loki.local"
+        podSecurityPolicy:
+          enabled: false   # Disable PodSecurityPolicy creation to avoid API errors
   syncPolicy:
     automated:
       prune: true
