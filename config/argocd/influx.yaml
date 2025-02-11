@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: https://helm.influxdata.com
-    targetRevision: 2.0.0 # vervang met de gewenste versie van de InfluxDB chart
+    targetRevision: 4.12.5 # vervang met de gewenste versie van de InfluxDB chart
     chart: influxdb2
     helm:
       values: |
