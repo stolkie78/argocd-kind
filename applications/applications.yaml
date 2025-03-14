@@ -23,27 +23,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kubernetes-dashboard
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: "https://github.com/stolkie78/argocd-kind.git"
-    targetRevision: HEAD
-    path: "deployments/kubernetes-dashboard"
-    directory:
-      recurse: true
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
   name: container-registry
   namespace: argocd
 spec:
@@ -52,49 +31,6 @@ spec:
     repoURL: "https://github.com/stolkie78/argocd-kind.git"
     targetRevision: HEAD
     path: "deployments/container-registry"
-    directory:
-      recurse: true
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: grafana
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: "https://github.com/stolkie78/argocd-kind.git"
-    targetRevision: HEAD
-    path: "deployments/grafana"
-    directory:
-      recurse: true
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
----
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: prometheus
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: "https://github.com/stolkie78/argocd-kind.git"
-    targetRevision: HEAD
-    path: "deployments/prometheus"
     directory:
       recurse: true
   destination:
