@@ -55,7 +55,7 @@ spec:
             - name: N8N_PROTOCOL
               value: "http"
             - name: N8N_PORT
-              value: "5678"
+              value: "80"
             - name: N8N_GENERIC_TIMEZONE
               value: "Europe/Amsterdam"
             - name: N8N_LOG_LEVEL
