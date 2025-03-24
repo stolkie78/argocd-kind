@@ -62,6 +62,8 @@ spec:
               value: "info"
             - name: N8N_DIAGNOSTICS_ENABLED
               value: "false"
+            - name: WEBHOOK_TUNNEL_URL
+              value: "http://n8n.kind.local"
           volumeMounts:
             - name: n8n-data
               mountPath: /home/node/.n8n
