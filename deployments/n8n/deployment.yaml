@@ -70,4 +70,4 @@ spec:
               service:
                 name: n8n
                 port:
-                  number: 8082
+                  number: 80
