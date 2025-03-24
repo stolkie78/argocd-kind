@@ -41,9 +41,10 @@ spec:
             - name: N8N_HOST
               value: "n8n.kind.local"
             - name: N8N_PROTOCOL
-              value: "https"
+              value: "http"
             - name: N8N_PORT
-              value: "443"
+              value: "5678"
+              
 ---
 apiVersion: v1
 kind: Service
