@@ -44,7 +44,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: container-registry
+  name: n8n
   namespace: argocd
 spec:
   project: default
