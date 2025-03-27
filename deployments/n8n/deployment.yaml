@@ -48,8 +48,6 @@ spec:
               value: "n8n.kind.local"
             - name: N8N_PROTOCOL
               value: "https"
-            - name: N8N_PORT
-              value: "443"
             - name: N8N_GENERIC_TIMEZONE
               value: "Europe/Amsterdam"
             - name: N8N_LOG_LEVEL
