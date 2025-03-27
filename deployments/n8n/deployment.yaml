@@ -36,22 +36,15 @@ spec:
           image: n8nio/n8n:latest
           ports:
             - containerPort: 5678
-          resources:
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
-            requests:
-              memory: "256Mi"
-              cpu: "250m"
           env:
-          - name: N8N_BASIC_AUTH_ACTIVE
-            value: "true"
-          - name: N8N_BASIC_AUTH_USER
-            value: "admin"
-          - name: N8N_BASIC_AUTH_PASSWORD
-            value: "strongpassword"
-          - name: WEBHOOK_TUNNEL_URL
-            value: "http://n8n.kind.local"
+            - name: N8N_BASIC_AUTH_ACTIVE
+              value: "true"
+            - name: N8N_BASIC_AUTH_USER
+              value: "admin"
+            - name: N8N_BASIC_AUTH_PASSWORD
+              value: "strongpassword"
+            - name: WEBHOOK_TUNNEL_URL
+              value: "http://n8n.kind.local"
           volumeMounts:
             - name: n8n-data
               mountPath: /home/node/.n8n
@@ -78,8 +71,6 @@ kind: Ingress
 metadata:
   name: n8n
   namespace: n8n
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
     - host: n8n.kind.local
