@@ -43,7 +43,7 @@ spec:
               value: "admin"
             - name: N8N_BASIC_AUTH_PASSWORD
               value: "strongpassword"
-            - name: VUE_APP_URL_BASE_API
+            - name: WEBHOOK_TUNNEL_URL
               value: "http://n8n.kind.local"
           resources:
             limits:
@@ -73,20 +73,17 @@ spec:
       port: 80
       targetPort: 5678
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: v1
+kind: Service
 metadata:
   name: n8n
   namespace: n8n
 spec:
-  rules:
-    - host: n8n.kind.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: n8n
-                port:
-                  number: 80
+  type: NodePort
+  selector:
+    app: n8n
+  ports:
+    - protocol: TCP
+      port: 5678
+      targetPort: 5678
+      nodePort: 30567
