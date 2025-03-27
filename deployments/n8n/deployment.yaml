@@ -43,8 +43,15 @@ spec:
               value: "admin"
             - name: N8N_BASIC_AUTH_PASSWORD
               value: "strongpassword"
-            - name: WEBHOOK_TUNNEL_URL
+            - name: VUE_APP_URL_BASE_API
               value: "http://n8n.kind.local"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
           volumeMounts:
             - name: n8n-data
               mountPath: /home/node/.n8n
