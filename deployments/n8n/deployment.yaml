@@ -44,16 +44,20 @@ spec:
               memory: "256Mi"
               cpu: "250m"
           env:
-            - name: N8N_BASIC_AUTH_ACTIVE
-              value: "true"
-            - name: N8N_BASIC_AUTH_USER
-              value: "admin"
-            - name: N8N_BASIC_AUTH_PASSWORD
-              value: "strongpassword"
-            - name: WEBHOOK_TUNNEL_URL
-              value: "https://n8n.kind.local"  # of http, afhankelijk van je setup
+            - name: N8N_HOST
+              value: "n8n.kind.local"
+            - name: N8N_PROTOCOL
+              value: "https"
+            - name: N8N_PORT
+              value: "443"
+            - name: N8N_GENERIC_TIMEZONE
+              value: "Europe/Amsterdam"
             - name: N8N_LOG_LEVEL
-              value: "debug"
+              value: "info"
+            - name: N8N_DIAGNOSTICS_ENABLED
+              value: "false"
+            - name: WEBHOOK_TUNNEL_URL
+              value: "https://n8n.kind.local"
           volumeMounts:
             - name: n8n-data
               mountPath: /home/node/.n8n
