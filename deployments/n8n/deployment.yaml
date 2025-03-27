@@ -63,7 +63,7 @@ spec:
             - name: N8N_DIAGNOSTICS_ENABLED
               value: "false"
             - name: WEBHOOK_TUNNEL_URL
-              value: "http://n8n.kind.local"
+              value: "https://n8n.kind.local"
           volumeMounts:
             - name: n8n-data
               mountPath: /home/node/.n8n
@@ -82,7 +82,7 @@ spec:
     app: n8n
   ports:
     - protocol: TCP
-      port: 5678
+      port: 80
       targetPort: 5678
 ---
 apiVersion: networking.k8s.io/v1
@@ -103,4 +103,4 @@ spec:
               service:
                 name: n8n
                 port:
-                  number: 5678
+                  number: 80
