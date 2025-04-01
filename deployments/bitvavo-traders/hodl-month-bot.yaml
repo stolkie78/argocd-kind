@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hodl-month-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hodl-month-bot
+  labels:
+    app: hodl-month-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hodl-month-bot
+  template:
+    metadata:
+      labels:
+        app: hodl-month-bot
+    spec:
+      containers:
+        - name: hodl-month
+          image: hodlbot:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PYTHONPATH
+              value: /app
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config/month.json
+              subPath: month.json
+            - name: data-volume
+              mountPath: /app/data
+      volumes:
+        - name: config-volume
+          configMap:
+            name: hodl-month-config
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: hodl-month-data-pvc
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hodl-month-config
+data:
+  month.json: |
+    {
+      "PROFILE": "MONTH",
+      "DEMO_MODE": false,
+      "PAIRS": [
+        "BTC-EUR", "ETH-EUR", "SOL-EUR", "LINK-EUR", "ADA-EUR", "DOT-EUR",
+        "AVAX-EUR", "ATOM-EUR", "FET-EUR", "AAVE-EUR", "UNI-EUR", "LTC-EUR", "XRP-EUR"
+      ],
+      "TRADE_FEE_PERCENTAGE": 0.33,
+      "CANDLES": 60,
+      "CANDLE_INTERVAL": "1d",
+      "RSI_BUY_THRESHOLD": 35,
+      "MAX_DAILY_TRADES_PER_PAIR": 1,
+      "MAX_TRADE_SIZE": 250,
+      "MIN_EUR_RESERVE": 2000,
+      "DCA_LAYERS": [
+        { "RSI_THRESHOLD": 35, "AMOUNT": 150 },
+        { "RSI_THRESHOLD": 30, "AMOUNT": 200 },
+        { "RSI_THRESHOLD": 25, "AMOUNT": 300 }
+      ],
+      "CHECK_INTERVAL": 1800,
+      "REBALANCE_EXCLUDE_PAIRS": ["BTC-EUR"],
+      "REBALANCE_MIN_HOLDINGS": {
+        "XRP-EUR": 5000
+      }
+    }
