@@ -45,6 +45,12 @@ spec:
               value: "strongpassword"
             - name: WEBHOOK_TUNNEL_URL
               value: "http://n8n.kind.local"
+            - name: N8N_HOST
+              value: "n8n.kind.local"
+            - name: N8N_PORT
+              value: "5678"
+            - name: N8N_PROTOCOL
+              value: "http"
           resources:
             limits:
               memory: "512Mi"
@@ -79,11 +85,11 @@ metadata:
   name: n8n-ingress
   namespace: n8n
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx  # Zorg ervoor dat je NGINX Ingress Controller gebruikt
+  ingressClassName: nginx
   rules:
     - host: n8n.kind.local
       http:
@@ -94,4 +100,4 @@ spec:
               service:
                 name: n8n
                 port:
-                  number: 5678
+                  number: 80
