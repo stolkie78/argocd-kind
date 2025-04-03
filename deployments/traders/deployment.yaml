@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: bitvavo-trader-config
-  namespace: default
+  namespace: traders
 data:
   trader.json: |
     {
@@ -34,7 +34,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bitvavo-trader
-  namespace: default
+  namespace: traders
 spec:
   replicas: 1
   selector:
