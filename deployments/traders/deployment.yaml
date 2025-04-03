@@ -64,7 +64,7 @@ spec:
               cpu: "250m"
           volumeMounts:
             - name: bitvavo-trader-config
-              mountPath: /app/config/trader.json
+              mountPath: /app/trader.json
               subPath: trader.json
             - name: bot-secrets
               mountPath: /app/config/slack.json
