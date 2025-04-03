@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: trader-config
+  name: bitvavo-trader-config
   namespace: default
 data:
   trader.json: |
