@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trader-config
+  namespace: default
+data:
+  trader.json: |
+    {
+      "PROFILE": "DAY",
+      "DEMO_MODE": true,
+      "PAIRS": [
+        "ETH-EUR",
+        "ADA-EUR",
+        "SOL-EUR"
+      ],
+      "PORTFOLIO_ALLOCATION": {
+        "ETH-EUR": 40,
+        "ADA-EUR": 30,
+        "SOL-EUR": 20
+      },
+      "TOTAL_BUDGET": 2000,
+      "CHECK_INTERVAL": 5,
+      "TRADE_FEE_PERCENTAGE": 0.33,
+      "MINIMUM_PROFIT_PERCENTAGE": 1.2,
+      "MAX_TRADES_PER_PAIR": 1,
+      "RSI_BUY_THRESHOLD": 38.0,
+      "RSI_SELL_THRESHOLD": 74.0,
+      "CANDLE_INTERVAL": "1h",
+      "CANDLES": 60,
+      "STOP_LOSS_PERCENTAGE": -5
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitvavo-trader
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bitvavo-trader
+  template:
+    metadata:
+      labels:
+        app: bitvavo-trader
+    spec:
+      containers:
+        - name: bitvavo-trader
+          image: bitvavo-trader:0.1.45
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PYTHONPATH
+              value: /app
+          workingDir: /app
+          command: ["python"]
+          args: ["bot/trader.py"]
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: bitvavo-trader-config
+              mountPath: /app/config/trader.json
+              subPath: trader.json
+            - name: bot-secrets
+              mountPath: /app/config/slack.json
+              subPath: slack.json
+            - name: bot-secrets
+              mountPath: /app/config/bitvavo.json
+              subPath: bitvavo.json
+      volumes:
+        - name: bitvavo-trader-config
+          configMap:
+            name: bitvavo-trader-config
+        - name: bot-secrets
+          secret:
+            secretName: bot-secrets
