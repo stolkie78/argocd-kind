@@ -14,7 +14,7 @@ spec:
       valueFiles:
         - application/kubernetes-dashboard/values.yaml
     repoURL: https://github.com/stolkie78/argocd-test.git
-    targetRevision: HEAD
+    targetRevision: main
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
