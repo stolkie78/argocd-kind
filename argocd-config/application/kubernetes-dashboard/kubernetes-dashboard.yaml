@@ -8,13 +8,15 @@ spec:
   source:
     chart: kubernetes-dashboard
     repoURL: https://kubernetes.github.io/dashboard/
-    targetRevision: '6.0.8'  # of pin een versie zoals '6.0.8'
+    targetRevision: 6.0.8  # ← stabiele versie die token login ondersteunt
     helm:
       values: |
         protocolHttp: true
+        settings:
+          authMode: token
         ingress:
           enabled: true
-          mode: standalone  # <<<< ZEER BELANGRIJK
+          mode: standalone
           className: nginx
           annotations:
             nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
