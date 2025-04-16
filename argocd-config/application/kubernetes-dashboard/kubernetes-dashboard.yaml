@@ -14,6 +14,7 @@ spec:
         protocolHttp: true
         ingress:
           enabled: true
+          mode: standalone       # <== 🔥 essentieel, anders gebruikt hij Kong
           className: nginx
           annotations:
             nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -21,7 +22,7 @@ spec:
           hosts:
             - kubedash.k8s.local
           path: /
-          pathType: Prefix
+          pathType: Prefix    
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
