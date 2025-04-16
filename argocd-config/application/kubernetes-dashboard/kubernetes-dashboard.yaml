@@ -12,7 +12,6 @@ spec:
     helm:
       valueFiles:
         - values.yaml
-    path: helm-applications/apps/kubernetes-dashboard
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard

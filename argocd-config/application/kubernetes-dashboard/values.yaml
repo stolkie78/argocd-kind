@@ -9,7 +9,7 @@ ingress:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
   hosts:
-    - kubedash.k8s.local
+    - kubernetes-dashboard.k8s.local
   path: /
   pathType: Prefix
 
