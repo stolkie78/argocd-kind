@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubernetes-dashboard
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes.github.io/dashboard/
+    chart: kubernetes-dashboard
+    targetRevision: 7.11.1
+    helm:
+      values: |
+        fullnameOverride: kubernetes-dashboard
+        protocolHttp: false
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+          hosts:
+            - kubedash.k8s.local
+          path: /
+          pathType: Prefix
+        settings:
+          clusterName: kubernetes
+          authMode: token
+          enableSkipLogin: false
+          enableInsecureLogin: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kubernetes-dashboard
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
