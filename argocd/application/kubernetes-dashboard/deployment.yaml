@@ -7,20 +7,20 @@ spec:
   project: default
   source:
     repoURL: https://github.com/stolkie78/argocd-test.git
-    targetRevision: main 
-    path: application/kubernetes-dashboard
+    targetRevision: main
+    path: . 
     helm:
       chart: kubernetes-dashboard
       repoURL: https://kubernetes.github.io/dashboard/
       targetRevision: 7.11.1
       valueFiles:
-        - values.yaml
+        - application/kubernetes-dashboard/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
   syncPolicy:
     automated:
-      prune: true
       selfHeal: true
+      prune: true
     syncOptions:
       - CreateNamespace=true
