@@ -1,24 +1,3 @@
-fullnameOverride: kubernetes-dashboard
-
-protocolHttp: true  # Voor lokale setup via HTTP
-
-ingress:
-  enabled: true
-  className: nginx
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-  hosts:
-    - kubedash.k8s.local
-  path: /
-  pathType: Prefix
-
-serviceAccount:
-  create: true
-  name: dashboard-admin-sa
-rbac:
-  clusterReadOnlyRole: false
----
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
