@@ -110,3 +110,12 @@ subjects:
   - kind: ServiceAccount
     name: default
     namespace: kubernetes-dashboard
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kubernetes-dashboard-csrf
+  namespace: kubernetes-dashboard
+type: Opaque
+stringData:
+  csrf: mysupersecuretoken
