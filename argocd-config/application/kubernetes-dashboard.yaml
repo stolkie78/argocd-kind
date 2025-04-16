@@ -19,15 +19,17 @@ spec:
           enableSkipLogin: false
           enableInsecureLogin: false
         ingress:
-          enabled: true
-          className: nginx
-          annotations:
-            nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-            nginx.ingress.kubernetes.io/ssl-redirect: "false"
-          hosts:
-            - kubedash.k8s.local
-          path: /
-          pathType: Prefix
+          - name: dashboard
+            enabled: true
+            className: nginx
+            annotations:
+              nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+              nginx.ingress.kubernetes.io/ssl-redirect: "false"
+            hosts:
+              - host: kubedash.k8s.local
+                paths:
+                  - path: /
+                    pathType: Prefix
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
