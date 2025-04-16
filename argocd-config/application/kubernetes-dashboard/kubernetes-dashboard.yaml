@@ -8,10 +8,20 @@ spec:
   source:
     chart: kubernetes-dashboard
     repoURL: https://kubernetes.github.io/dashboard/
-    targetRevision: '*'  # ← altijd laatste versie
+    targetRevision: '*'  # altijd laatste versie
     helm:
-      valueFiles:
-        - values.yaml
+      values: |
+        protocolHttp: true
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+          hosts:
+            - kubedash.k8s.local
+          path: /
+          pathType: Prefix
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
