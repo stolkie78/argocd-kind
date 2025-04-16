@@ -1,35 +1,20 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+apiVersion: v1
+kind: ServiceAccount
 metadata:
-  name: kubernetes-dashboard
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://kubernetes.github.io/dashboard/
-    chart: kubernetes-dashboard
-    targetRevision: 6.0.8  # check: helm search repo kubernetes-dashboard
-    helm:
-      values: |
-        fullnameOverride: kubernetes-dashboard
-        protocolHttp: true
-        ingress:
-          enabled: true
-          className: nginx
-          annotations:
-            nginx.ingress.kubernetes.io/ssl-redirect: "false"
-            nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-          hosts:
-            - dashboard.k8s.local
-          paths:
-            - /
-          pathType: Prefix
-  destination:
-    server: https://kubernetes.default.svc
+  name: dashboard-admin
+  namespace: kubernetes-dashboard
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dashboard-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: dashboard-admin
     namespace: kubernetes-dashboard
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+---
+
