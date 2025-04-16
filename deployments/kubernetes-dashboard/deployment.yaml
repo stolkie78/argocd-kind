@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
-labels:
-  k8s-app: kubernetes-dashboard
 spec:
   replicas: 1
   selector:
@@ -26,6 +24,13 @@ spec:
             - --enable-insecure-login=true
             - --namespace=kubernetes-dashboard
             - --token-ttl=43200
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           volumeMounts:
             - mountPath: /certs
               name: kubernetes-dashboard-certs
@@ -47,19 +52,23 @@ spec:
     k8s-app: kubernetes-dashboard
 ---
 apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: kubernetes-dashboard
-  namespace: kubernetes-dashboard
-  annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - kubedash.k8s.local
+      secretName: kubernetes-dashboard-tls
   rules:
     - host: kubedash.k8s.local
       http:
         paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: kubernetes-dashboard
+                port:
+                  number: 80
           - path: /
             pathType: Prefix
             backend:
