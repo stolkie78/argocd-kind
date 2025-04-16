@@ -13,6 +13,11 @@ spec:
       values: |
         fullnameOverride: kubernetes-dashboard
         protocolHttp: false
+        settings:
+          clusterName: kubernetes
+          authMode: token
+          enableSkipLogin: false
+          enableInsecureLogin: false
         ingress:
           enabled: true
           className: nginx
@@ -21,13 +26,9 @@ spec:
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
           hosts:
             - kubedash.k8s.local
-          path: /
+          paths:
+            - /
           pathType: Prefix
-        settings:
-          clusterName: kubernetes
-          authMode: token
-          enableSkipLogin: false
-          enableInsecureLogin: false
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
