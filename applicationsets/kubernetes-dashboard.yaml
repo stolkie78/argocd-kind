@@ -22,7 +22,7 @@ spec:
         targetRevision: '{{version}}'
         helm:
           valueFiles:
-            - values/values.yaml
+            - values.yaml
         path: helm-applications/apps/{{name}}
       destination:
         server: https://kubernetes.default.svc
