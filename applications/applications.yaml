@@ -23,7 +23,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: aaplications
+  name: aplications
   namespace: argocd
 spec:
   project: default
@@ -38,5 +38,5 @@ spec:
     namespace: argocd
   syncPolicy:
     automated:
-      selfHeal: true
-      prune: true
+      selfHeal: false
+      prune: false
