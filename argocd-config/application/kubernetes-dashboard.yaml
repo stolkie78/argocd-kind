@@ -26,8 +26,7 @@ spec:
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
           hosts:
             - kubedash.k8s.local
-          paths:
-            - /
+          path: /
           pathType: Prefix
   destination:
     server: https://kubernetes.default.svc
