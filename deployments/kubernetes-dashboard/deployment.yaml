@@ -13,6 +13,7 @@ spec:
       labels:
         k8s-app: kubernetes-dashboard
     spec:
+      serviceAccountName: dashboard-admin
       containers:
         - name: kubernetes-dashboard
           image: kubernetesui/dashboard:v2.7.0
@@ -52,23 +53,19 @@ spec:
     k8s-app: kubernetes-dashboard
 ---
 apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   ingressClassName: nginx
-  tls:
-    - hosts:
-        - kubedash.k8s.local
-      secretName: kubernetes-dashboard-tls
   rules:
     - host: kubedash.k8s.local
       http:
         paths:
-          - path: /
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: kubernetes-dashboard
-                port:
-                  number: 80
           - path: /
             pathType: Prefix
             backend:
@@ -94,30 +91,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: dashboard-admin
-    namespace: kubernetes-dashboard
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: dashboard-secrets-reader
-  namespace: kubernetes-dashboard
-rules:
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["get", "list"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: dashboard-secrets-reader
-  namespace: kubernetes-dashboard
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: dashboard-secrets-reader
-subjects:
-  - kind: ServiceAccount
-    name: default
     namespace: kubernetes-dashboard
 ---
 apiVersion: v1
@@ -150,5 +123,5 @@ roleRef:
   name: dashboard-secret-full-access
 subjects:
   - kind: ServiceAccount
-    name: default
+    name: dashboard-admin
     namespace: kubernetes-dashboard
