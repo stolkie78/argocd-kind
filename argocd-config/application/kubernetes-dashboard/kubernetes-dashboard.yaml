@@ -8,13 +8,13 @@ spec:
   source:
     chart: kubernetes-dashboard
     repoURL: https://kubernetes.github.io/dashboard/
-    targetRevision: '*'  # altijd laatste versie
+    targetRevision: '*'  # of pin een versie zoals '6.0.8'
     helm:
       values: |
         protocolHttp: true
         ingress:
           enabled: true
-          mode: standalone       # <== 🔥 essentieel, anders gebruikt hij Kong
+          mode: standalone  # <<<< ZEER BELANGRIJK
           className: nginx
           annotations:
             nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -22,7 +22,7 @@ spec:
           hosts:
             - kubedash.k8s.local
           path: /
-          pathType: Prefix    
+          pathType: Prefix
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
