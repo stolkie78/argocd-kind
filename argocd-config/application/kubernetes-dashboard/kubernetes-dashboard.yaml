@@ -6,30 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://kubernetes.github.io/dashboard/
-    chart: kubernetes-dashboard
-    targetRevision: 7.12.0
+    repoURL: https://github.com/your-user/your-repo.git
+    targetRevision: HEAD
+    path: kubernetes-dashboard
     helm:
-      values: |
-        fullnameOverride: kubernetes-dashboard
-        protocolHttp: false
-        settings:
-          clusterName: kubernetes
-          authMode: token
-          enableSkipLogin: false
-          enableInsecureLogin: false
-        ingress:
-          - name: dashboard
-            enabled: true
-            className: nginx
-            annotations:
-              nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-              nginx.ingress.kubernetes.io/ssl-redirect: "false"
-            hosts:
-              - host: kubedash.k8s.local
-                paths:
-                  - path: /
-                    pathType: Prefix
+      valueFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
