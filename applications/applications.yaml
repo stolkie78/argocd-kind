@@ -7,7 +7,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "https://github.com/stolkie78/argocd-kind.git"
+    repoURL: "https://github.com/stolkie78/argocd-test.git"
     targetRevision: HEAD
     path: "deployments/cluster"
     directory:
@@ -28,7 +28,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "https://github.com/stolkie78/argocd-kind.git"
+    repoURL: "https://github.com/stolkie78/argocd-test.git"
     targetRevision: HEAD
     path: "deployments/container-registry"
     directory:
@@ -49,7 +49,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "https://github.com/stolkie78/argocd-kind.git"
+    repoURL: "https://github.com/stolkie78/argocd-test.git"
     targetRevision: HEAD
     path: "deployments/n8n"
     directory:
@@ -65,14 +65,14 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: traders
+  name: dashboard
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: "https://github.com/stolkie78/argocd-kind.git"
+    repoURL: "https://github.com/stolkie78/argocd-test.git"
     targetRevision: HEAD
-    path: "deployments/traders"
+    path: "deployments/dashboard"
     directory:
       recurse: true
   destination:
