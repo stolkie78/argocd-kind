@@ -18,39 +18,3 @@ serviceAccount:
   name: dashboard-admin-sa
 rbac:
   clusterReadOnlyRole: false
----
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: helm-applications
-  namespace: argocd
-spec:
-  generators:
-    - list:
-        elements:
-          - name: kubernetes-dashboard
-            chart: kubernetes-dashboard
-            repoURL: https://kubernetes.github.io/dashboard/
-            version: 6.0.8
-  template:
-    metadata:
-      name: '{{name}}'
-    spec:
-      project: default
-      source:
-        chart: '{{chart}}'
-        repoURL: '{{repoURL}}'
-        targetRevision: '{{version}}'
-        helm:
-          valueFiles:
-            - values/values.yaml
-        path: helm-applications/apps/{{name}}
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: '{{name}}'
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
