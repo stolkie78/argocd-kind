@@ -1,3 +1,4 @@
+# Kubernetes Dashboard Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,39 +20,71 @@ spec:
           image: kubernetesui/dashboard:v2.7.0
           ports:
             - containerPort: 8443
-              protocol: TCP
           args:
             - --enable-skip-login=false
             - --enable-insecure-login=true
-            - --namespace=kubernetes-dashboard
             - --token-ttl=43200
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "250m"
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
+            - --namespace=kubernetes-dashboard
           volumeMounts:
-            - mountPath: /certs
-              name: kubernetes-dashboard-certs
+            - name: kubernetes-dashboard-certs
+              mountPath: /certs
               readOnly: true
       volumes:
         - name: kubernetes-dashboard-certs
           emptyDir: {}
+
 ---
+# Metrics Scraper Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard-metrics-scraper
+  namespace: kubernetes-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: dashboard-metrics-scraper
+  template:
+    metadata:
+      labels:
+        k8s-app: dashboard-metrics-scraper
+    spec:
+      containers:
+        - name: scraper
+          image: kubernetesui/metrics-scraper:v1.0.8
+          ports:
+            - containerPort: 8000
+
+---
+# Services
 apiVersion: v1
 kind: Service
 metadata:
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
 spec:
+  selector:
+    k8s-app: kubernetes-dashboard
   ports:
     - port: 443
       targetPort: 8443
-  selector:
-    k8s-app: kubernetes-dashboard
+
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard-metrics-scraper
+  namespace: kubernetes-dashboard
+spec:
+  selector:
+    k8s-app: dashboard-metrics-scraper
+  ports:
+    - port: 8000
+      targetPort: 8000
+
+---
+# Ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -72,8 +105,10 @@ spec:
               service:
                 name: kubernetes-dashboard
                 port:
-                  number: 8443
+                  number: 443
+
 ---
+# ServiceAccount + Full RBAC
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -93,6 +128,7 @@ subjects:
     name: dashboard-admin
     namespace: kubernetes-dashboard
 ---
+# Secret for CSRF
 apiVersion: v1
 kind: Secret
 metadata:
@@ -102,6 +138,7 @@ type: Opaque
 stringData:
   csrf: mysupersecuretoken
 ---
+# Role for dashboard-admin SA to manage secrets
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
