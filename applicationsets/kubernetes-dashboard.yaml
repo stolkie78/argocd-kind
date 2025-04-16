@@ -1,35 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
+kind: Application
 metadata:
-  name: helm-applications
+  name: kubernetes-dashboard
   namespace: argocd
 spec:
-  generators:
-    - list:
-        elements:
-          - name: kubernetes-dashboard
-            chart: kubernetes-dashboard
-            repoURL: https://kubernetes.github.io/dashboard/
-            version: 6.0.8
-  template:
-    metadata:
-      name: '{{name}}'
-    spec:
-      project: default
-      source:
-        chart: '{{chart}}'
-        repoURL: '{{repoURL}}'
-        targetRevision: '{{version}}'
-        helm:
-          valueFiles:
-            - values.yaml
-        path: helm-applications/apps/{{name}}
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: '{{name}}'
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
+  project: default
+  source:
+    chart: kubernetes-dashboard
+    repoURL: https://kubernetes.github.io/dashboard/
+    targetRevision: '*'  # ← altijd laatste versie
+    helm:
+      valueFiles:
+        - values.yaml
+    path: helm-applications/apps/kubernetes-dashboard
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kubernetes-dashboard
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
