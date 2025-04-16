@@ -1,35 +1,34 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: dashboards
+  name: dashboard-apps
   namespace: argocd
 spec:
   generators:
-    - directory:
+    - git:
         repoURL: https://github.com/stolkie78/argocd-test.git
         revision: HEAD
-        directory: application/
+        directories:
+          - path: application/*
   template:
     metadata:
       name: '{{path.basename}}'
     spec:
       project: default
       source:
-        repoURL: https://github.com/stolkie78/argocd-test.git
-        targetRevision: HEAD
-        path: application/{{path.basename}}
-        helm:
-          valueFiles:
-            - values.yaml
         chart: kubernetes-dashboard
         repoURL: https://kubernetes.github.io/dashboard/
         targetRevision: 7.11.1
+        path: application/{{path.basename}}  # pad naar values.yaml
+        helm:
+          valueFiles:
+            - values.yaml
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{path.basename}}'
       syncPolicy:
         automated:
-          prune: true
           selfHeal: true
+          prune: true
         syncOptions:
           - CreateNamespace=true
