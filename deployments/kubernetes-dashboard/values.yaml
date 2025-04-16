@@ -1,0 +1,21 @@
+app:
+  mode: dashboard
+  settings:
+    authMode: token
+    enableSkipLogin: false
+    enableInsecureLogin: false
+    clusterName: kubernetes
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - kubedash.k8s.local
+    path: /
+    pathType: Prefix
+    useDefaultIngressClass: false
+    useDefaultAnnotations: true
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    tls:
+      enabled: false
