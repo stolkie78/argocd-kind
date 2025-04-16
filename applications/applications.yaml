@@ -23,14 +23,14 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: container-registry
+  name: aaplications
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: "https://github.com/stolkie78/argocd-test.git"
     targetRevision: HEAD
-    path: "deployments/container-registry"
+    path: "deployments/*"
     directory:
       recurse: true
   destination:
@@ -40,46 +40,3 @@ spec:
     automated:
       selfHeal: true
       prune: true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: n8n
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: "https://github.com/stolkie78/argocd-test.git"
-    targetRevision: HEAD
-    path: "deployments/n8n"
-    directory:
-      recurse: true
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: dashboard
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: "https://github.com/stolkie78/argocd-test.git"
-    targetRevision: HEAD
-    path: "deployments/dashboard"
-    directory:
-      recurse: true
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
----
