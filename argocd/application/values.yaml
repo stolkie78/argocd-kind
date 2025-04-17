@@ -1,0 +1,33 @@
+expose:
+  type: ingress
+  ingress:
+    ingressClassName: nginx
+    hosts:
+      core: harbor.k8s.local
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    tls:
+      enabled: false
+
+externalURL: http://harbor.k8s.local
+
+harborAdminPassword: SuperSecret123
+
+persistence:
+  persistentVolumeClaim:
+    registry:
+      storageClass: local-path
+      size: 5Gi
+    jobservice:
+      storageClass: local-path
+      size: 1Gi
+    database:
+      storageClass: local-path
+      size: 1Gi
+    redis:
+      storageClass: local-path
+      size: 1Gi
+    trivy:
+      storageClass: local-path
+      size: 1Gi
